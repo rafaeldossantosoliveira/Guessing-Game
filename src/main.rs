@@ -9,25 +9,20 @@ struct Game {
 }
 fn main() {
     let mut rng = rand::thread_rng();
-    let mut data_game = Game {
+    let mut game = Game {
         secret_number: rng.gen_range(1..=100),
         plays: 0,
         status: false,
         last_play: 0,
     };
-    let mut input = String::new();
-    io::stdin()
-        .read_line(&mut input)
-        .expect("***Failed to read user input***");
-    let mut val: u32 = input.trim().parse().expect("***Enter a valid number***");
-    let mut status_game: bool = update(&mut data_game, val);
-    while status_game != true {
-        input = String::new();
+    let mut status: bool = false;
+    while !status {
+        let mut input = String::new();
         io::stdin()
             .read_line(&mut input)
             .expect("***Failed to read user input***");
-        val = input.trim().parse().expect("***Enter a valid number***");
-        status_game = update(&mut data_game, val);
+        let value: u32 = input.trim().parse().expect("***Enter a valid number***");
+        status = update(&mut game, value)
     }
 }
 
@@ -49,11 +44,13 @@ fn update(data: &mut Game, value: u32) -> bool{
         println!("!!!Game Finished!!!");
         println!("The secret_number is..... {}", data.secret_number);
 
+        println!();
+
         println!("!!!Match details!!!");
         println!(r#"
         Secret Number: {}
         Attempts: {}
-        Last_Guess: {}
+        Last Guess: {}
         "#, data.secret_number, data.plays, data.last_play);
     }
     return status
